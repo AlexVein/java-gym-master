@@ -13,12 +13,7 @@ public class Timetable {
     private final HashMap<DayOfWeek, Map<TimeOfDay, List<TrainingSession>>> timetable;
 
     private static final Comparator<Map.Entry<Coach, Integer>> COACH_COUNT_COMPARATOR =
-            new Comparator<Map.Entry<Coach, Integer>>() {
-                @Override
-                public int compare(Map.Entry<Coach, Integer> e1, Map.Entry<Coach, Integer> e2) {
-                    return Integer.compare(e2.getValue(), e1.getValue());
-                }
-            };
+            Map.Entry.<Coach, Integer>comparingByValue().reversed();
 
     public Timetable() {
         timetable = new HashMap<>();
@@ -43,12 +38,12 @@ public class Timetable {
         sessions.add(trainingSession);
     }
 
-    public Map<TimeOfDay, List<TrainingSession>> getTrainingSessionsForDay(DayOfWeek dayOfWeek) {
+    public TreeMap<TimeOfDay, List<TrainingSession>> getTrainingSessionsForDay(DayOfWeek dayOfWeek) {
         Map<TimeOfDay, List<TrainingSession>> daySchedule = timetable.get(dayOfWeek);
         if (daySchedule == null) {
             return new TreeMap<>();
         }
-        return daySchedule;
+        return new TreeMap<>(daySchedule);
     }
 
     public List<TrainingSession> getTrainingSessionsForDayAndTime(DayOfWeek dayOfWeek, TimeOfDay timeOfDay) {
